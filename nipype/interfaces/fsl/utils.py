@@ -71,10 +71,14 @@ class RobustFOVInputSpec(FSLCommandInputSpec):
     out_roi = File(desc="ROI volume output name", argstr="-r %s",
                    name_source=['in_file'], hash_files=False,
                    name_template='%s_ROI')
+    out_matrix = File(desc="Output matrix name", argstr="-m %s",
+                   name_source=['in_file'], hash_files=False,
+                   name_template='%s_ROI')
 
 
 class RobustFOVOutputSpec(TraitedSpec):
-    out_roi = File(exists=True, desc="ROI volume output name")
+    out_roi = File(exists=True, desc="ROI volume output")
+    out_matrix = File(exists=True, desc="Transformation matrix from roi to full fov")
 
 
 class RobustFOV(FSLCommand):
