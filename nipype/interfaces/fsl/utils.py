@@ -1318,7 +1318,7 @@ class SigLoss(FSLCommand):
 
 class Reorient2StdInputSpec(FSLCommandInputSpec):
     in_file = File(exists=True, mandatory=True, argstr="%s")
-    out_file = File(genfile=True, hash_files=False, argstr="%s")
+    out_file = File(name_template='%s_std', name_source=['in_file'], hash_files=False, argstr="%s")
 
 
 class Reorient2StdOutputSpec(TraitedSpec):
@@ -1342,20 +1342,6 @@ class Reorient2Std(FSLCommand):
     _cmd = 'fslreorient2std'
     input_spec = Reorient2StdInputSpec
     output_spec = Reorient2StdOutputSpec
-
-    def _gen_filename(self, name):
-        if name == 'out_file':
-            return self._gen_fname(self.inputs.in_file,
-                                   suffix="_reoriented")
-        return None
-
-    def _list_outputs(self):
-        outputs = self.output_spec().get()
-        if not isdefined(self.inputs.out_file):
-            outputs['out_file'] = self._gen_filename('out_file')
-        else:
-            outputs['out_file'] = os.path.abspath(self.inputs.out_file)
-        return outputs
 
 
 class InvWarpInputSpec(FSLCommandInputSpec):
