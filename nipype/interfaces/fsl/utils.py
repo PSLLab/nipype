@@ -73,7 +73,7 @@ class RobustFOVInputSpec(FSLCommandInputSpec):
                    name_template='%s_ROI')
     out_matrix = File(desc="Output matrix name", argstr="-m %s",
                    name_source=['in_file'], hash_files=False,
-                   name_template='%s_ROI')
+                   name_template='%s_ROI.mat', keep_extension=True)
 
 
 class RobustFOVOutputSpec(TraitedSpec):
