@@ -1006,20 +1006,6 @@ class ApplyWarp(FSLCommand):
             return spec.argstr % str(value)
         return super(ApplyWarp, self)._format_arg(name, spec, value)
 
-    def _list_outputs(self):
-        outputs = self._outputs().get()
-        if not isdefined(self.inputs.out_file):
-            outputs['out_file'] = self._gen_fname(self.inputs.in_file,
-                                                  suffix='_warp')
-        else:
-            outputs['out_file'] = os.path.abspath(self.inputs.out_file)
-        return outputs
-
-    def _gen_filename(self, name):
-        if name == 'out_file':
-            return self._list_outputs()[name]
-        return None
-
 
 class SliceTimerInputSpec(FSLCommandInputSpec):
     in_file = File(exists=True, argstr='--in=%s',
