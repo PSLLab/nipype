@@ -1105,8 +1105,8 @@ class Affine2RigidInputSpec(FSLCommandInputSpec):
     in_file = File(exists=True,
                    desc='input filename',
                    argstr='%s', position=0, mandatory=True)
-    out_matrix = File(desc="Output matrix name", argstr="%s", pos=1
-                   name_source=['in_file'], hash_files=False, mandatory=True
+    out_matrix = File(desc="Output matrix name", argstr="%s", pos=1,
+                   name_source=['in_file'], hash_files=False, mandatory=True,
                    name_template='%s_aff2rigid.mat', keep_extension=True)
 
 class Affine2RigidOutputSpec(TraitedSpec):
