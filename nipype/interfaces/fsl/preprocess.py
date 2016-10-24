@@ -947,7 +947,7 @@ class ApplyWarpInputSpec(FSLCommandInputSpec):
     in_file = File(exists=True, argstr='--in=%s',
                    mandatory=True, position=0,
                    desc='image to be warped')
-    out_file = File(argstr='--out=%s', genfile=True, position=2,
+    out_file = File(argstr='--out=%s', name_template='%s_warp', position=2,
                     desc='output filename', hash_files=False)
     ref_file = File(exists=True, argstr='--ref=%s',
                     mandatory=True, position=1,
