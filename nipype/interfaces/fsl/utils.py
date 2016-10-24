@@ -1134,7 +1134,7 @@ class ConvertXFMInputSpec(FSLCommandInputSpec):
                                  xor=_options, requires=["in_file2"],
                                  desc=("use secondary matrix to fix scale and "
                                        "skew"))
-    out_file = File(name_template='%s_xfm.mat', keep_extension=True, argstr="-omat %s", position=1,
+    out_file = File(name_template='%s_xfm.mat', name_source=['in_file'], keep_extension=True, argstr="-omat %s", position=1,
                     desc="final transformation matrix", hash_files=False)
 
 
