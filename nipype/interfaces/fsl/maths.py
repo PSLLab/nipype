@@ -33,6 +33,7 @@ class MathsInput(FSLCommandInputSpec):
 
     nan2zeros = traits.Bool(position=3, argstr='-nan',
                             desc='change NaNs to zeros before doing anything')
+    suffix = traits.Str(desc="out_file suffix")
 
 
 class MathsOutput(TraitedSpec):
@@ -51,7 +52,11 @@ class MathsCommand(FSLCommand):
         outputs = self.output_spec().get()
         outputs["out_file"] = self.inputs.out_file
         if not isdefined(self.inputs.out_file):
-            outputs["out_file"] = self._gen_fname(self.inputs.in_file, suffix=self._suffix)
+            if isdefined(self.inputs.suffix):
+                suffix = self.inputs.suffix
+            else:
+                suffix = self._suffix
+            outputs["out_file"] = self._gen_fname(self.inputs.in_file, suffix=suffix)
         outputs["out_file"] = os.path.abspath(outputs["out_file"])
         return outputs
 
