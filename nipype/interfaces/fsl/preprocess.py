@@ -1129,9 +1129,9 @@ class FUGUEInputSpec(FSLCommandInputSpec):
     fmap_in_file = File(exists=True, argstr='--loadfmap=%s',
                         desc='filename for loading fieldmap (rad/s)')
     unwarped_file = File(argstr='--unwarp=%s', desc='apply unwarping and save as filename',
-                         xor=['warped_file'], requires=['in_file'])
+                         xor=['warped_file'], requires=['in_file'], name_source=['in_file'])
     warped_file = File(argstr='--warp=%s', desc='apply forward warping and save as filename',
-                       xor=['unwarped_file'], requires=['in_file'])
+                       xor=['unwarped_file'], requires=['in_file'], name_source=['in_file'])
 
     forward_warping = traits.Bool(False, usedefault=True,
                                   desc='apply forward warping instead of unwarping')
@@ -1178,14 +1178,14 @@ class FUGUEInputSpec(FSLCommandInputSpec):
     # Special outputs: shift (voxel shift map, vsm)
     save_shift = traits.Bool(False, xor=['save_unmasked_shift'],
                              desc='write pixel shift volume')
-    shift_out_file = File(argstr='--saveshift=%s', desc='filename for saving pixel shift volume')
+    shift_out_file = File(argstr='--saveshift=%s', desc='filename for saving pixel shift volume', name_source=['in_file'])
     save_unmasked_shift = traits.Bool(argstr='--unmaskshift', xor=['save_shift'],
                                       desc='saves the unmasked shiftmap when using --saveshift')
 
     # Special outputs: fieldmap (fmap)
     save_fmap = traits.Bool(False, xor=['save_unmasked_fmap'],
                             desc='write field map volume')
-    fmap_out_file = File(argstr='--savefmap=%s', desc='filename for saving fieldmap (rad/s)')
+    fmap_out_file = File(argstr='--savefmap=%s', desc='filename for saving fieldmap (rad/s)',  name_source=['in_file'])
     save_unmasked_fmap = traits.Bool(False, argstr='--unmaskfmap', xor=['save_fmap'],
                                      desc='saves the unmasked fieldmap when using --savefmap')
 
