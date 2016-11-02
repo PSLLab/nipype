@@ -213,7 +213,7 @@ class KernelInput(MathsInput):
 
 class DilateInput(KernelInput):
 
-    operation = traits.Enum("mean", "modal", "max", argstr="-dil%s", position=6, mandatory=True,
+    operation = traits.Enum("mean", "modal", "max", "all", argstr="-dil%s", position=6, mandatory=True,
                             desc="filtering operation to perfoem in dilation")
 
 
@@ -226,7 +226,7 @@ class DilateImage(MathsCommand):
 
     def _format_arg(self, name, spec, value):
         if name == "operation":
-            return spec.argstr % dict(mean="M", modal="D", max="F")[value]
+            return spec.argstr % dict(mean="M", modal="D", max="F", all="all")[value]
         return super(DilateImage, self)._format_arg(name, spec, value)
 
 
