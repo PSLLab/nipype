@@ -1953,7 +1953,7 @@ class MakeSurfacesInputSpec(FSTraitedSpec):
                    desc="Implicit input file <hemisphere>.orig")
     in_wm = File(exists=True, mandatory=True, argstr='-wm %s',
                  desc="Implicit input file wm.mgz")
-    in_filled = File(exists=True, mandatory=True, argstr='-filled %s'
+    in_filled = File(exists=True, mandatory=True, argstr='-filled %s',
                      desc="Implicit input file filled.mgz")
     # optional
     in_white = File(exists=True, desc="Implicit input that is sometimes used")
