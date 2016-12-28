@@ -337,6 +337,83 @@ class SurfaceSmooth(FSCommand):
         return None
 
 
+class SurfaceTransformWhiteInputSpec(FSTraitedSpec):
+    source_file = File(exists=True, mandatory=True, argstr="--sval-xyz %s",
+                       xor=['source_file'],
+                       desc="surface file with xyz source values")
+    subject = traits.String(mandatory=True, argstr='-s %s', desc='subject as both source and target')
+    hemi = traits.Enum("lh", "rh", argstr="--hemi %s", mandatory=True,
+                       desc="hemisphere to transform")
+    reg = File(exists=True, argstr='--reg %s', desc='registration file', position = 3)
+    reg_geometry = File(exists=True, argstr='%s', position=4, desc='registration volume for geometry')
+    tval_xyz = traits.Bool(argstr='--tval-xyz', desc='tval_xyz')
+    surf_reg = traits.String(argstr='--surfreg %s', desc='surfreg')
+    out_file = File(argstr="--tval %s", genfile=True,
+                    desc="surface file to write")
+
+
+class SurfaceTransformWhiteOutputSpec(TraitedSpec):
+    out_file = File(exists=True, desc="transformed surface file")
+
+
+class SurfaceTransformWhite(FSCommand):
+    """Transform a surface file from one subject to another via a spherical registration.
+
+    Both the source and target subject must reside in your Subjects Directory,
+    and they must have been processed with recon-all, unless you are transforming
+    to one of the icosahedron meshes.
+
+    Examples
+    --------
+
+    >>> from nipype.interfaces.freesurfer import SurfaceTransform
+    >>> sxfm = SurfaceTransform()
+    >>> sxfm.inputs.source_file = "lh.cope1.nii.gz"
+    >>> sxfm.inputs.source_subject = "my_subject"
+    >>> sxfm.inputs.target_subject = "fsaverage"
+    >>> sxfm.inputs.hemi = "lh"
+    >>> sxfm.run() # doctest: +SKIP
+
+    """
+    _cmd = "mri_surf2surf"
+    input_spec = SurfaceTransformWhiteInputSpec
+    output_spec = SurfaceTransformWhiteOutputSpec
+
+    def _list_outputs(self):
+        outputs = self._outputs().get()
+        outputs["out_file"] = self.inputs.out_file
+        if not isdefined(outputs["out_file"]):
+            if isdefined(self.inputs.source_file):
+                source = self.inputs.source_file
+            else:
+                source = self.inputs.source_annot_file
+
+            # Some recon-all files don't have a proper extension (e.g. "lh.thickness")
+            # so we have to account for that here
+            bad_extensions = [".%s" % e for e in ["area", "mid", "pial", "avg_curv", "curv", "inflated",
+                                                  "jacobian_white", "orig", "nofix", "smoothwm", "crv",
+                                                  "sphere", "sulc", "thickness", "volume", "white"]]
+            use_ext = True
+            if split_filename(source)[2] in bad_extensions:
+                source = source + ".stripme"
+                use_ext = False
+            ext = ""
+            if isdefined(self.inputs.target_type):
+                ext = "." + filemap[self.inputs.target_type]
+                use_ext = False
+            outputs["out_file"] = fname_presuffix(source,
+                                                  suffix=".%s%s" % (self.inputs.target_subject, ext),
+                                                  newpath=os.getcwd(),
+                                                  use_ext=use_ext)
+        else:
+            outputs["out_file"] = os.path.abspath(self.inputs.out_file)
+        return outputs
+
+    def _gen_filename(self, name):
+        if name == "out_file":
+            return self._list_outputs()[name]
+        return None
+
 class SurfaceTransformInputSpec(FSTraitedSpec):
     source_file = File(exists=True, mandatory=True, argstr="--sval %s",
                        xor=['source_annot_file'],
@@ -1874,9 +1951,9 @@ class MakeSurfacesInputSpec(FSTraitedSpec):
     # implicit
     in_orig = File(exists=True, mandatory=True, argstr='-orig %s',
                    desc="Implicit input file <hemisphere>.orig")
-    in_wm = File(exists=True, mandatory=True,
+    in_wm = File(exists=True, mandatory=True, argstr='-wm %s'
                  desc="Implicit input file wm.mgz")
-    in_filled = File(exists=True, mandatory=True,
+    in_filled = File(exists=True, mandatory=True, argstr='-filled %s'
                      desc="Implicit input file filled.mgz")
     # optional
     in_white = File(exists=True, desc="Implicit input that is sometimes used")
@@ -1912,6 +1989,7 @@ class MakeSurfacesInputSpec(FSTraitedSpec):
                               desc="If running as a node, set this to True." +
                               "This will copy the input files to the node " +
                               "directory.")
+    first_wm_peak = traits.Bool(argstr='-first_wm_peak', desc='first_wm_peak')
 
 
 class MakeSurfacesOutputSpec(TraitedSpec):

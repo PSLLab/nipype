@@ -1508,6 +1508,10 @@ class NormalizeInputSpec(FSTraitedSpec):
                         exists=True, desc="The input segmentation for Normalize")
     transform = File(exists=True,
                      desc="Tranform file from the header of the input file")
+    control_file = File(exists=True, desc='file containing control points',
+                        argstr='-f %s')
+    surface_lh = File(exists=True, desc='surface file', argstr='-surface %s identity.nofile')
+    surface_rh = File(exists=True, desc='surface file', argstr='-surface %s identity.nofile') 
 
 
 class NormalizeOutputSpec(TraitedSpec):
