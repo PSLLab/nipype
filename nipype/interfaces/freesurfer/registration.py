@@ -209,10 +209,10 @@ class EMRegister(FSCommandOpenMP):
     input_spec = EMRegisterInputSpec
     output_spec = EMRegisterOutputSpec
 
-    def _list_outputs(self):
-        outputs = self.output_spec().get()
-        outputs['out_file'] = os.path.abspath(self.inputs.out_file)
-        return outputs
+    # def _list_outputs(self):
+    #     outputs = self.output_spec().get()
+    #     outputs['out_file'] = os.path.abspath(self.inputs.out_file)
+    #     return outputs
 
 
 class RegisterInputSpec(FSTraitedSpec):
