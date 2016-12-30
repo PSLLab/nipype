@@ -623,6 +623,7 @@ class ReconAllInputSpec(CommandLineInputSpec):
     subjects_dir = Directory(exists=True, argstr='-sd %s', hash_files=False,
                              desc='path to subjects directory', genfile=True)
     flags = traits.Str(argstr='%s', desc='additional parameters')
+    disallow_resume = traits.Bool(desc='bypass nipype resuming code')
 
 
 class ReconAllIOutputSpec(FreeSurferSource.output_spec):
@@ -767,6 +768,8 @@ class ReconAll(CommandLine):
 
     def _is_resuming(self):
         subjects_dir = self.inputs.subjects_dir
+        if self.inputs.disallow_resume:
+            return False
         if not isdefined(subjects_dir):
             subjects_dir = self._gen_subjects_dir()
         if os.path.isdir(os.path.join(subjects_dir, self.inputs.subject_id,
