@@ -793,6 +793,7 @@ class ReconAll(CommandLine):
         if isdefined(subjects_dir):
             shutil.copytree(os.path.join(subjects_dir, subject_id), os.path.join(os.getcwd(), subject_id))
             subjects_dir = os.getcwd()
+            self.inputs.subjects_dir = subjects_dir
         if not isdefined(subjects_dir):
             subjects_dir = self._gen_subjects_dir()
         # cmd = cmd.replace(' -all ', ' -make all ')
