@@ -788,7 +788,7 @@ class ReconAll(CommandLine):
         cmd = super(ReconAll, self).cmdline
         subjects_dir = self.inputs.subjects_dir
         subject_id = self.inputs.subject_id
-        if isdefined(subjects_dir):
+        if isdefined(subjects_dir) and subjects_dir != os.getcwd():
             iflogger.info('copying files')
             shutil.copytree(os.path.join(subjects_dir, subject_id), os.path.join(os.getcwd(), subject_id))
             subjects_dir = os.getcwd()
