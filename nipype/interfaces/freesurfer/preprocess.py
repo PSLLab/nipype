@@ -785,14 +785,15 @@ class ReconAll(CommandLine):
 
     @property
     def cmdline(self):
+        cmd = super(ReconAll, self).cmdline
         subjects_dir = self.inputs.subjects_dir
         subject_id = self.inputs.subject_id
         if isdefined(subjects_dir):
             iflogger.info('copying files')
             shutil.copytree(os.path.join(subjects_dir, subject_id), os.path.join(os.getcwd(), subject_id))
             subjects_dir = os.getcwd()
+            cmd = cmd.replace(' -%s ' % self.inputs.subjects_dir, ' -%s ' % subjects_dir)
             self.inputs.subjects_dir = subjects_dir
-        cmd = super(ReconAll, self).cmdline
         if not self._is_resuming():
             return cmd
         if not isdefined(subjects_dir):
