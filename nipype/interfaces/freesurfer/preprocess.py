@@ -620,7 +620,7 @@ class ReconAllInputSpec(CommandLineInputSpec):
                          desc='Use converted T2 to refine the cortical surface')
     openmp = traits.Int(argstr="-openmp %d",
                         desc="Number of processors to use in parallel")
-    subjects_dir = Directory(exists=True, argstr='-sd %s', hash_files=False,
+    subjects_dir = Directory(exists=True, argstr='-sd %s', hash_files=False, copyfile=True,
                              desc='path to subjects directory', genfile=True)
     flags = traits.Str(argstr='%s', desc='additional parameters')
     disallow_resume = traits.Bool(desc='bypass nipype resuming code')
