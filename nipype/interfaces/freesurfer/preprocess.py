@@ -789,6 +789,9 @@ class ReconAll(CommandLine):
         if not self._is_resuming():
             return cmd
         subjects_dir = self.inputs.subjects_dir
+        if isdefined(subjects_dir):
+            shutil.copytree(os.path.join(subjects_dir, subject_id), os.path.join(os.path.getcwd(), subject_id))
+            subjects_dir = os.path.getcwd()
         if not isdefined(subjects_dir):
             subjects_dir = self._gen_subjects_dir()
         # cmd = cmd.replace(' -all ', ' -make all ')
