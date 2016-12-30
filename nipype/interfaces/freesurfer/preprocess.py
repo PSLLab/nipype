@@ -789,6 +789,7 @@ class ReconAll(CommandLine):
         if not self._is_resuming():
             return cmd
         subjects_dir = self.inputs.subjects_dir
+        subject_id = self.inputs.subject_id
         if isdefined(subjects_dir):
             shutil.copytree(os.path.join(subjects_dir, subject_id), os.path.join(os.path.getcwd(), subject_id))
             subjects_dir = os.path.getcwd()
