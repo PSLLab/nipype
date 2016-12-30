@@ -20,7 +20,7 @@ from ..freesurfer.base import (FSCommand, FSTraitedSpec,
                                FSScriptCommand, FSScriptOutputSpec,
                                FSTraitedSpecOpenMP, FSCommandOpenMP)
 from ..base import TraitedSpec, File, traits, OutputMultiPath, isdefined, CommandLine, CommandLineInputSpec, DynamicTraitedSpec, BaseInterfaceInputSpec
-from .io import IOBase, add_traits
+from ..io import IOBase, add_traits
 from ...utils.filemanip import fname_presuffix, split_filename
 
 filemap = dict(cor='cor', mgh='mgh', mgz='mgz', minc='mnc',
