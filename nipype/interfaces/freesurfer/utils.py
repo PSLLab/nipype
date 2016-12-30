@@ -76,6 +76,7 @@ def createoutputdirs(outputs):
 
 class ModifySubsDirInputSpec(DynamicTraitedSpec, BaseInterfaceInputSpec):
     subjects_dir = Directory(exists=True, desc='Freesurfer subjects directory.')
+    subject_id = traits.String(desc="subject id")
 
 class ModifySubsDirOutputSpec(TraitedSpec):
     subjects_dir = Directory(exists=True, desc='Freesurfer subjects directory.')
