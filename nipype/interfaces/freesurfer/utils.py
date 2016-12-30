@@ -103,6 +103,8 @@ class ModifySubsDir(IOBase):
             indirectory = getattr(self.inputs, 'dir%d' % (idx + 1))
             inbasename = getattr(self.inputs, 'basename%d' % (idx + 1))
             if isdefined(infile) and isdefined(indirectory):
+                if not isdefined(inbasename):
+                    inbasename = None
                 copy2subjdir(self, infile, indirectory, inbasename)
         outputs['subjects_dir'] = os.path.abspath(subjects_dir)
         return outputs
