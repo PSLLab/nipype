@@ -87,7 +87,7 @@ class ModifySubsDir(IOBase):
     output_spec = ModifySubsDirOutputSpec
 
     def __init__(self, numinputs=0, **inputs):
-        super(Merge, self).__init__(**inputs)
+        super(ModifySubsDir, self).__init__(**inputs)
         self._numinputs = numinputs
         add_traits(self.inputs, ['in%d' % (i + 1) for i in range(numinputs)])
         add_traits(self.inputs, ['dir%d' % (i + 1) for i in range(numinputs)])
