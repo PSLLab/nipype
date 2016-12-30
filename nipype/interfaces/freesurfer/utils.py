@@ -19,7 +19,7 @@ import shutil
 from ..freesurfer.base import (FSCommand, FSTraitedSpec,
                                FSScriptCommand, FSScriptOutputSpec,
                                FSTraitedSpecOpenMP, FSCommandOpenMP)
-from ..base import TraitedSpec, File, traits, OutputMultiPath, isdefined, CommandLine, CommandLineInputSpec, DynamicTraitedSpec, BaseInterfaceInputSpec
+from ..base import TraitedSpec, File, traits, OutputMultiPath, isdefined, CommandLine, CommandLineInputSpec, DynamicTraitedSpec, BaseInterfaceInputSpec, Directory
 from ..io import IOBase, add_traits
 from ...utils.filemanip import fname_presuffix, split_filename
 
