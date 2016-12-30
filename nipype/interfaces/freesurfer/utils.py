@@ -73,6 +73,37 @@ def createoutputdirs(outputs):
         if not os.path.isdir(dirname):
             os.makedirs(dirname)
 
+class ModifySubsDirInputSpec(DynamicTraitedSpec, BaseInterfaceInputSpec):
+    subjects_dir = Directory(exists=True, desc='Freesurfer subjects directory.')
+
+class ModifySubsDirOutputSpec(TraitedSpec):
+    subjects_dir = Directory(exists=True, desc='Freesurfer subjects directory.')
+
+class ModifySubsDir(IOBase):
+    """Basic interface class to merge inputs into a single list
+    """
+    input_spec = ModifySubsDirInputSpec
+    output_spec = ModifySubsDirOutputSpec
+
+    def __init__(self, numinputs=0, **inputs):
+        super(Merge, self).__init__(**inputs)
+        self._numinputs = numinputs
+        add_traits(self.inputs, ['in%d' % (i + 1) for i in range(numinputs)])
+        add_traits(self.inputs, ['dir%d' % (i + 1) for i in range(numinputs)])
+        add_traits(self.inputs, ['basename%d' % (i + 1) for i in range(numinputs)])
+
+    def _list_outputs(self):
+        outputs = self._outputs().get()
+        out = []
+        subjects_dir = self.inputs.subjects_dir
+        for idx in range(self._numinputs):
+            infile = getattr(self.inputs, 'in%d' % (idx + 1))
+            indirectory = getattr(self.inputs, 'dir%d' % (idx + 1))
+            inbasename = getattr(self.inputs, 'basename%d' % (idx + 1))
+            if isdefined(infile) and isdefined(indirectory):
+                copy2subjdir(self, infile, indirectory, inbasename)
+        outputs['subjects_dir'] = os.path.abspath(subjects_dir)
+        return outputs
 
 class SampleToSurfaceInputSpec(FSTraitedSpec):
 

@@ -217,7 +217,6 @@ class FSCommandOpenMP(FSCommand):
         self._num_threads_update()
         return super(FSCommandOpenMP, self).run(**inputs)
 
-
 def no_freesurfer():
     """Checks if FreeSurfer is NOT installed
     used with skipif to skip tests that will
