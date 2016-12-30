@@ -101,6 +101,7 @@ class ModifySubsDir(IOBase):
         subject_id = self.inputs.subject_id
         shutil.copytree(os.path.join(subjects_dir, subject_id), os.path.join(os.getcwd(), subject_id))
         subjects_dir = os.getcwd()
+        self.inputs.subjects_dir = subjects_dir
         for idx in range(self._numinputs):
             infile = getattr(self.inputs, 'in%d' % (idx + 1))
             indirectory = getattr(self.inputs, 'dir%d' % (idx + 1))
