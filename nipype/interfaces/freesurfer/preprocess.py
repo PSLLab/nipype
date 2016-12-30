@@ -763,7 +763,7 @@ class ReconAll(CommandLine):
                                         subjects_dir=subjects_dir,
                                         hemi=hemi)._list_outputs())
         outputs['subject_id'] = self.inputs.subject_id
-        outputs['subjects_dir'] = subjects_dir
+        outputs['subjects_dir'] = os.getcwd()
         return outputs
 
     def _is_resuming(self):
@@ -791,8 +791,8 @@ class ReconAll(CommandLine):
         subjects_dir = self.inputs.subjects_dir
         subject_id = self.inputs.subject_id
         if isdefined(subjects_dir):
-            shutil.copytree(os.path.join(subjects_dir, subject_id), os.path.join(os.path.getcwd(), subject_id))
-            subjects_dir = os.path.getcwd()
+            shutil.copytree(os.path.join(subjects_dir, subject_id), os.path.join(os.getcwd(), subject_id))
+            subjects_dir = os.getcwd()
         if not isdefined(subjects_dir):
             subjects_dir = self._gen_subjects_dir()
         # cmd = cmd.replace(' -all ', ' -make all ')
