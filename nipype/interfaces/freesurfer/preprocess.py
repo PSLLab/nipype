@@ -785,15 +785,15 @@ class ReconAll(CommandLine):
 
     @property
     def cmdline(self):
+        if isdefined(subjects_dir):
+            shutil.copytree(os.path.join(subjects_dir, subject_id), os.path.join(os.getcwd(), subject_id))
+            subjects_dir = os.getcwd()
+            self.inputs.subjects_dir = subjects_dir
         cmd = super(ReconAll, self).cmdline
         if not self._is_resuming():
             return cmd
         subjects_dir = self.inputs.subjects_dir
         subject_id = self.inputs.subject_id
-        if isdefined(subjects_dir):
-            shutil.copytree(os.path.join(subjects_dir, subject_id), os.path.join(os.getcwd(), subject_id))
-            subjects_dir = os.getcwd()
-            self.inputs.subjects_dir = subjects_dir
         if not isdefined(subjects_dir):
             subjects_dir = self._gen_subjects_dir()
         # cmd = cmd.replace(' -all ', ' -make all ')
