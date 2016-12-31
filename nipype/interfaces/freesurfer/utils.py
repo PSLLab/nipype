@@ -2132,7 +2132,8 @@ class MakeSurfaces(FSCommand):
         elif name in ['orig_white', 'orig_pial']:
             # these inputs do take full file paths or even basenames
             basename = os.path.basename(value)
-            suffix = basename.split('.')[1]
+            suffix = basename.split('.')[1:]
+            suffix = '.'.join(suffix)
             return spec.argstr % suffix
         elif name == 'in_orig':
             if value.endswith('lh.orig') or value.endswith('rh.orig'):
