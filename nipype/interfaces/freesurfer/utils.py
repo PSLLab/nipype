@@ -2098,9 +2098,9 @@ class MakeSurfaces(FSCommand):
             if 'subjects_dir' in inputs:
                 inputs['subjects_dir'] = self.inputs.subjects_dir
             copy2subjdir(self, self.inputs.in_wm,
-                         folder='mri', basename='wm.mgz')
+                         folder='mri')
             copy2subjdir(self, self.inputs.in_filled,
-                         folder='mri', basename='filled.mgz')
+                         folder='mri')
             copy2subjdir(self, self.inputs.in_white,
                          'surf', '{0}.white'.format(self.inputs.hemisphere))
             for originalfile in [self.inputs.in_aseg,
