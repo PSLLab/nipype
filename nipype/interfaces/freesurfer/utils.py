@@ -2125,10 +2125,7 @@ class MakeSurfaces(FSCommand):
             # These inputs do not take full paths as inputs or even basenames
             basename = os.path.basename(value)
             # whent the -mgz flag is specified, it assumes the mgz extension
-            if self.inputs.mgz:
-                prefix = os.path.splitext(basename)[0]
-            else:
-                prefix = basename
+            prefix = os.path.splitext(basename)[0]
             if prefix == 'aseg':
                 return # aseg is already the default
             return spec.argstr % prefix
