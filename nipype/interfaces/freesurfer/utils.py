@@ -422,7 +422,7 @@ class SurfaceTransformWhite(FSCommand):
     output_spec = SurfaceTransformWhiteOutputSpec
 
     def _format_arg(self, name, spec, value):
-        if name in ["surf_reg"]:
+        if name in ['surf_reg', 'source_file']:
             # mri_cc can't use abspaths just the basename
             basename = os.path.basename(value)[3:]
             return spec.argstr % basename
@@ -433,7 +433,7 @@ class SurfaceTransformWhite(FSCommand):
             self.inputs.subjects_dir = os.getcwd()
             if 'subjects_dir' in inputs:
                 inputs['subjects_dir'] = self.inputs.subjects_dir
-            for originalfile in [self.inputs.surf_reg]:
+            for originalfile in [self.inputs.surf_reg, self.inputs.source_file]:
                 copy2subjdir(self, originalfile, folder='surf')
         return super(SurfaceTransformWhite, self).run(**inputs)
 
