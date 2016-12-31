@@ -1600,7 +1600,7 @@ class FreeSurferSource(IOBase):
             if self.inputs.hemi != 'both':
                 globprefix = self.inputs.hemi + '.'
             else:
-                globprefix = '*'
+                globprefix = '??.'
         if key == 'aseg_stats' or key == 'wmparc_stats':
             globprefix = ''
         keydir = os.path.join(path, dirval)
