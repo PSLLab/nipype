@@ -853,6 +853,9 @@ class BBRegisterInputSpec(FSTraitedSpec):
                                  desc="write the transformation matrix in FSL FLIRT format")
     registered_file = traits.Either(traits.Bool, File, argstr='--o %s',
                                     desc='output warped sourcefile either True or filename')
+    surf_file = traits.String(desc='surface name', argstr='--surf %s')
+    lh_surf = traits.File(desc='implicit copy')
+    rh_surf = traits.File(desc='implicit copy')
 
 
 class BBRegisterOutputSpec(TraitedSpec):
@@ -883,6 +886,34 @@ class BBRegister(FSCommand):
     _cmd = 'bbregister'
     input_spec = BBRegisterInputSpec
     output_spec = BBRegisterOutputSpec
+
+# just copied this from another function, needs to be edited for this function
+    def run(self, **inputs):
+        if self.inputs.copy_inputs:
+            self.inputs.subjects_dir = os.getcwd()
+            if 'subjects_dir' in inputs:
+                inputs['subjects_dir'] = self.inputs.subjects_dir
+            copy2subjdir(self, self.inputs.in_wm,
+                         folder='mri', basename='wm.mgz')
+            copy2subjdir(self, self.inputs.in_filled,
+                         folder='mri', basename='filled.mgz')
+            copy2subjdir(self, self.inputs.in_white,
+                         'surf', '{0}.white'.format(self.inputs.hemisphere))
+            for originalfile in [self.inputs.in_aseg,
+                                 self.inputs.in_T1]:
+                copy2subjdir(self, originalfile, folder='mri')
+            for originalfile in [self.inputs.orig_white,
+                                 self.inputs.orig_pial,
+                                 self.inputs.in_orig]:
+                copy2subjdir(self, originalfile, folder='surf')
+            if isdefined(self.inputs.in_label):
+                copy2subjdir(self, self.inputs.in_label, 'label',
+                             '{0}.aparc.annot'.format(self.inputs.hemisphere))
+            else:
+                os.makedirs(os.path.join(self.inputs.subjects_dir,
+                                         self.inputs.subject_id,
+                                         'label'))
+        return super(MakeSurfaces, self).run(**inputs)
 
     def _list_outputs(self):
 

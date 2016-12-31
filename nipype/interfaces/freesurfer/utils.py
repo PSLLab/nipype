@@ -386,9 +386,12 @@ class SurfaceTransformWhiteInputSpec(FSTraitedSpec):
     reg = File(exists=True, argstr='--reg %s', desc='registration file', position = 3)
     reg_geometry = File(exists=True, argstr='%s', position=4, desc='registration volume for geometry')
     tval_xyz = traits.Bool(argstr='--tval-xyz', desc='tval_xyz')
-    surf_reg = traits.String(argstr='--surfreg %s', desc='surfreg')
+    surf_reg = File(exists=True, argstr='--surfreg %s', desc='surfreg')
     out_file = File(argstr="--tval %s", genfile=True,
                     desc="surface file to write")
+    copy_inputs = traits.Bool(desc="If running as a node, set this to True." +
+                       "This will copy the input files to the node " +
+                       "directory.")
 
 
 class SurfaceTransformWhiteOutputSpec(TraitedSpec):
@@ -417,6 +420,22 @@ class SurfaceTransformWhite(FSCommand):
     _cmd = "mri_surf2surf"
     input_spec = SurfaceTransformWhiteInputSpec
     output_spec = SurfaceTransformWhiteOutputSpec
+
+    def _format_arg(self, name, spec, value):
+        if name in ["surf_reg"]:
+            # mri_cc can't use abspaths just the basename
+            basename = os.path.basename(value)
+            return spec.argstr % basename
+        return super(SurfaceTransformWhite, self)._format_arg(name, spec, value)
+
+    def run(self, **inputs):
+        if self.inputs.copy_inputs:
+            self.inputs.subjects_dir = os.getcwd()
+            if 'subjects_dir' in inputs:
+                inputs['subjects_dir'] = self.inputs.subjects_dir
+            for originalfile in [self.inputs.surf_reg]:
+                copy2subjdir(self, originalfile, folder='surf')
+        return super(SurfaceTransformWhite, self).run(**inputs)
 
     def _list_outputs(self):
         outputs = self._outputs().get()
