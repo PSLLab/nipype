@@ -2014,7 +2014,7 @@ class MakeSurfacesInputSpec(FSTraitedSpec):
                    desc="Implicit input file <hemisphere>.orig")
     in_wm = File(exists=True, mandatory=True, argstr='-wm %s',
                  desc="Implicit input file wm.mgz")
-    in_filled = File(exists=True, mandatory=True, argst='-filled %s',
+    in_filled = File(exists=True, mandatory=True, argstr='-filled %s',
                      desc="Implicit input file filled.mgz")
     # optional
     in_white = File(exists=True, desc="Implicit input that is sometimes used")
@@ -2121,7 +2121,7 @@ class MakeSurfaces(FSCommand):
 
 
     def _format_arg(self, name, spec, value):
-        if name in ['in_T1', 'in_aseg']:
+        if name in ['in_T1', 'in_aseg', 'in_filled', 'in_wm']:
             # These inputs do not take full paths as inputs or even basenames
             basename = os.path.basename(value)
             # whent the -mgz flag is specified, it assumes the mgz extension
