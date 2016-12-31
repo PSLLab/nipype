@@ -439,7 +439,10 @@ class SurfaceTransformWhite(FSCommand):
 
     def _list_outputs(self):
         outputs = self._outputs().get()
-        outputs["out_file"] = self.inputs.out_file
+        out_basename = os.path.basename(self.inputs.out_file)
+        outputs['out_file'] = os.path.join(self.inputs.subjects_dir,
+                                           self.inputs.subject_id,
+                                           'surf', out_basename)
         if not isdefined(outputs["out_file"]):
             if isdefined(self.inputs.source_file):
                 source = self.inputs.source_file
