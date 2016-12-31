@@ -424,7 +424,7 @@ class SurfaceTransformWhite(FSCommand):
     def _format_arg(self, name, spec, value):
         if name in ["surf_reg"]:
             # mri_cc can't use abspaths just the basename
-            basename = os.path.basename(value)
+            basename = os.path.basename(value)[3:]
             return spec.argstr % basename
         return super(SurfaceTransformWhite, self)._format_arg(name, spec, value)
 
