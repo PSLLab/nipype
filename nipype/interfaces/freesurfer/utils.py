@@ -380,7 +380,7 @@ class SurfaceTransformWhiteInputSpec(FSTraitedSpec):
     source_file = File(exists=True, mandatory=True, argstr="--sval-xyz %s",
                        xor=['source_file'],
                        desc="surface file with xyz source values")
-    subject = traits.String(mandatory=True, argstr='-s %s', desc='subject as both source and target')
+    subject = traits.String(mandatory=True, argstr='--s %s', desc='subject as both source and target')
     hemi = traits.Enum("lh", "rh", argstr="--hemi %s", mandatory=True,
                        desc="hemisphere to transform")
     reg = File(exists=True, argstr='--reg %s', desc='registration file', position = 3)
