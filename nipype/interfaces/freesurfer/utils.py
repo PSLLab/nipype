@@ -388,7 +388,7 @@ class SurfaceTransformWhiteInputSpec(FSTraitedSpec):
     tval_xyz = traits.Bool(argstr='--tval-xyz', desc='tval_xyz')
     surf_reg = File(exists=True, argstr='--surfreg %s', desc='surfreg')
     out_file = File(argstr="--tval %s", genfile=True,
-                    desc="surface file to write")
+                    desc="surface file to write", hash_files=False)
     copy_inputs = traits.Bool(desc="If running as a node, set this to True." +
                        "This will copy the input files to the node " +
                        "directory.")
