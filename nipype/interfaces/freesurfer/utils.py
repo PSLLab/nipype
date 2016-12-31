@@ -392,9 +392,6 @@ class SurfaceTransformWhiteInputSpec(FSTraitedSpec):
     copy_inputs = traits.Bool(desc="If running as a node, set this to True." +
                        "This will copy the input files to the node " +
                        "directory.")
-    subject_id = traits.String('subject_id', argstr="%s", mandatory=True,
-                               position=-1, usedefault=True,
-                               desc="Subject name")
 
 
 class SurfaceTransformWhiteOutputSpec(TraitedSpec):
