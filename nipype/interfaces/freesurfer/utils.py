@@ -439,6 +439,7 @@ class SurfaceTransformWhite(FSCommand):
 
     def _list_outputs(self):
         outputs = self._outputs().get()
+        outputs["out_file"] = self.inputs.out_file
         if not isdefined(outputs["out_file"]):
             if isdefined(self.inputs.source_file):
                 source = self.inputs.source_file
