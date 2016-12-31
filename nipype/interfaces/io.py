@@ -1517,6 +1517,8 @@ class FSSourceOutputSpec(TraitedSpec):
         loc='mri')
     curv = OutputMultiPath(File(exists=True), desc='Maps of surface curvature',
                            loc='surf')
+    area = OutputMultiPath(File(exists=True), desc='Maps of surface curvature',
+                          loc='surf')
     inflated = OutputMultiPath(
         File(exists=True), desc='Inflated surface meshes',
         loc='surf')
