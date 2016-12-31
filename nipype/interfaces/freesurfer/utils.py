@@ -2142,7 +2142,7 @@ class MakeSurfaces(FSCommand):
                 # if the input orig file is different than lh.orig or rh.orig
                 # these inputs do take full file paths or even basenames
                 basename = os.path.basename(value)
-                suffix = basename.split('.')[1]
+                suffix = basename.split('.')[1:]
                 return spec.argstr % suffix
         return super(MakeSurfaces, self)._format_arg(name, spec, value)
 
