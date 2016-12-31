@@ -1556,7 +1556,7 @@ class NormalizeInputSpec(FSTraitedSpec):
 
 
 class NormalizeOutputSpec(TraitedSpec):
-    out_file = traits.File(exists=False, desc="The output file for Normalize")
+    out_file = traits.File(exists=True, desc="The output file for Normalize")
 
 
 class Normalize(FSCommand):
