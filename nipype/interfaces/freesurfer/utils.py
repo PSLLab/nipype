@@ -439,8 +439,8 @@ class SurfaceTransformWhite(FSCommand):
 
     def _list_outputs(self):
         outputs = self._outputs().get()
-        outputs["out_file"] = self.inputs.out_file
-        if not isdefined(outputs["out_file"]):
+        outputs['out_file'] = self.inputs.out_file
+        if not isdefined(outputs['out_file']):
             if isdefined(self.inputs.source_file):
                 source = self.inputs.source_file
             else:
@@ -459,7 +459,7 @@ class SurfaceTransformWhite(FSCommand):
             if isdefined(self.inputs.target_type):
                 ext = "." + filemap[self.inputs.target_type]
                 use_ext = False
-            outputs["out_file"] = fname_presuffix(source,
+            outputs['out_file'] = fname_presuffix(source,
                                                   suffix=".%s%s" % (self.inputs.target_subject, ext),
                                                   newpath=os.getcwd(),
                                                   use_ext=use_ext)
@@ -2143,6 +2143,7 @@ class MakeSurfaces(FSCommand):
                 # these inputs do take full file paths or even basenames
                 basename = os.path.basename(value)
                 suffix = basename.split('.')[1:]
+                suffix = '.'.join(suffix)
                 return spec.argstr % suffix
         return super(MakeSurfaces, self)._format_arg(name, spec, value)
 
