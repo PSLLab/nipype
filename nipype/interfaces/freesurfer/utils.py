@@ -1464,9 +1464,22 @@ class Tkregister2(FSCommand):
     input_spec = Tkregister2InputSpec
     output_spec = Tkregister2OutputSpec
 
+    def _format_arg(self, name, spec, value):
+        if name in ['reg_file']:
+            # mri_cc can't use abspaths just the basename
+            basename = os.path.basename(value)
+            return spec.argstr % basename
+        return super(Tkregister2, self)._format_arg(name, spec, value)
+
+    def run(self, **inputs):
+        # copy the registration file because this command modifies it
+        if os.path.isfile(self.inputs.reg_file):
+            shutil.copy(self.inputs.reg_file, os.getcwd())
+        return super(Tkregister2, self).run(**inputs)
+
     def _list_outputs(self):
         outputs = self._outputs().get()
-        outputs['reg_file'] = os.path.abspath(self.inputs.reg_file)
+        outputs['reg_file'] = os.path.abspath(os.path.basename(self.inputs.reg_file))
         if isdefined(self.inputs.fsl_out):
             outputs['fsl_file'] = os.path.abspath(self.inputs.fsl_out)
         return outputs
@@ -2051,6 +2064,7 @@ class MakeSurfacesInputSpec(FSTraitedSpec):
                               "This will copy the input files to the node " +
                               "directory.")
     first_wm_peak = traits.Bool(argstr='-first_wm_peak', desc='first_wm_peak')
+    suffix = traits.String('', usedefault=True, desc='suffic to put on the end of file names output')
 
 
 class MakeSurfacesOutputSpec(TraitedSpec):
@@ -2150,6 +2164,7 @@ class MakeSurfaces(FSCommand):
 
     def _list_outputs(self):
         outputs = self._outputs().get()
+        suffix = self.inputs.suffix
         # Outputs are saved in the surf directory
         dest_dir = os.path.join(self.inputs.subjects_dir,
                                 self.inputs.subject_id, 'surf')
@@ -2158,27 +2173,27 @@ class MakeSurfaces(FSCommand):
             self.inputs.subjects_dir, self.inputs.subject_id, 'label')
         if not self.inputs.no_white:
             outputs["out_white"] = os.path.join(
-                dest_dir, str(self.inputs.hemisphere) + '.white')
+                dest_dir, str(self.inputs.hemisphere) + '.white' + suffix)
         # The curv and area files must have the hemisphere names as a prefix
         outputs["out_curv"] = os.path.join(
-            dest_dir, str(self.inputs.hemisphere) + '.curv')
+            dest_dir, str(self.inputs.hemisphere) + '.curv' + suffix)
         outputs["out_area"] = os.path.join(
-            dest_dir, str(self.inputs.hemisphere) + '.area')
+            dest_dir, str(self.inputs.hemisphere) + '.area' + suffix)
         # Something determines when a pial surface and thickness file is generated
         # but documentation doesn't say what.
         # The orig_pial input is just a guess
         if isdefined(self.inputs.orig_pial) or self.inputs.white == 'NOWRITE':
-            outputs["out_curv"] = outputs["out_curv"] + ".pial"
-            outputs["out_area"] = outputs["out_area"] + ".pial"
+            outputs["out_curv"] = outputs["out_curv"] + ".pial" + suffix
+            outputs["out_area"] = outputs["out_area"] + ".pial" + suffix
             outputs["out_pial"] = os.path.join(
-                dest_dir, str(self.inputs.hemisphere) + '.pial')
+                dest_dir, str(self.inputs.hemisphere) + '.pial' + suffix)
             outputs["out_thickness"] = os.path.join(
-                dest_dir, str(self.inputs.hemisphere) + '.thickness')
+                dest_dir, str(self.inputs.hemisphere) + '.thickness' + suffix)
         else:
             # when a pial surface is generated, the cortex label file is not
             # generated
             outputs["out_cortex"] = os.path.join(
-                label_dir, str(self.inputs.hemisphere) + '.cortex.label')
+                label_dir, str(self.inputs.hemisphere) + '.cortex.label' + suffix)
         return outputs
 
 
