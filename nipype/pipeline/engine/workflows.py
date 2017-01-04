@@ -680,7 +680,8 @@ connected.
                 data = graph.get_edge_data(*edge)
                 sourceinfo = [v1[0] if isinstance(v1, tuple) else v1
                               for v1, v2 in data['connect']]
-                node.needed_outputs += [v for v in sourceinfo
+                sourceinfo_set = set(sourceinfo)
+                node.needed_outputs += [v for v in sourceinfo_set
                                         if v not in node.needed_outputs]
             if node.needed_outputs:
                 node.needed_outputs = sorted(node.needed_outputs)
