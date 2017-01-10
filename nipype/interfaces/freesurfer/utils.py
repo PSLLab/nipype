@@ -2122,8 +2122,10 @@ class MakeSurfaces(FSCommand):
             copy2subjdir(self, self.inputs.in_white,
                          'surf', '{0}.white'.format(self.inputs.hemisphere))
             for originalfile in [self.inputs.in_aseg,
-                                 self.inputs.in_T1, self.inputs.in_T2]:
+                                 self.inputs.in_T1]:
                 copy2subjdir(self, originalfile, folder='mri')
+            for originalfile in [self.inputs.in_T2]:
+                copy2subjdir(self, originalfile)
             for originalfile in [self.inputs.orig_white,
                                  self.inputs.orig_pial,
                                  self.inputs.in_orig]:
@@ -2142,7 +2144,7 @@ class MakeSurfaces(FSCommand):
         if name in ['in_T1', 'in_aseg', 'in_filled', 'in_wm', 'in_T2']:
             # These inputs do not take full paths as inputs or even basenames
             basename = os.path.basename(value)
-            # whent the -mgz flag is specified, it assumes the mgz extension
+            # when the -mgz flag is specified, it assumes the mgz extension
             prefix = os.path.splitext(basename)[0]
             if prefix == 'aseg':
                 return # aseg is already the default
