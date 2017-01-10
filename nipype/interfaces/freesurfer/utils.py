@@ -2122,7 +2122,7 @@ class MakeSurfaces(FSCommand):
             copy2subjdir(self, self.inputs.in_white,
                          'surf', '{0}.white'.format(self.inputs.hemisphere))
             for originalfile in [self.inputs.in_aseg,
-                                 self.inputs.in_T1]:
+                                 self.inputs.in_T1, self.inputs.in_T2]:
                 copy2subjdir(self, originalfile, folder='mri')
             for originalfile in [self.inputs.orig_white,
                                  self.inputs.orig_pial,
