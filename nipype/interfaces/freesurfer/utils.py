@@ -2139,7 +2139,7 @@ class MakeSurfaces(FSCommand):
 
 
     def _format_arg(self, name, spec, value):
-        if name in ['in_T1', 'in_aseg', 'in_filled', 'in_wm']:
+        if name in ['in_T1', 'in_aseg', 'in_filled', 'in_wm', 'in_T2']:
             # These inputs do not take full paths as inputs or even basenames
             basename = os.path.basename(value)
             # whent the -mgz flag is specified, it assumes the mgz extension
