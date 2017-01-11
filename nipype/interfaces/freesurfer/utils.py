@@ -2152,8 +2152,7 @@ class MakeSurfaces(FSCommand):
             basename = os.path.basename(value)
             suffix = basename.split('.')[0:-1]
             suffix = '.'.join(suffix)
-            return os.path.join(self.inputs.subjects_dir,
-                                self.inputs.subject_id,
+            return os.path.join(self.inputs.subject_id,
                                 'mri', spec.argstr % suffix)
         elif name in ['orig_white', 'orig_pial']:
             # these inputs do take full file paths or even basenames
