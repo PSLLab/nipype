@@ -2122,10 +2122,8 @@ class MakeSurfaces(FSCommand):
             copy2subjdir(self, self.inputs.in_white,
                          'surf', '{0}.white'.format(self.inputs.hemisphere))
             for originalfile in [self.inputs.in_aseg,
-                                 self.inputs.in_T1]:
+                                 self.inputs.in_T1, self.inputs.in_T2]:
                 copy2subjdir(self, originalfile, folder='mri')
-            for originalfile in [self.inputs.in_T2]:
-                copy2subjdir(self, originalfile)
             for originalfile in [self.inputs.orig_white,
                                  self.inputs.orig_pial,
                                  self.inputs.in_orig]:
@@ -2141,7 +2139,7 @@ class MakeSurfaces(FSCommand):
 
 
     def _format_arg(self, name, spec, value):
-        if name in ['in_T1', 'in_aseg', 'in_filled', 'in_wm', 'in_T2']:
+        if name in ['in_T1', 'in_aseg', 'in_filled', 'in_wm']:
             # These inputs do not take full paths as inputs or even basenames
             basename = os.path.basename(value)
             # when the -mgz flag is specified, it assumes the mgz extension
@@ -2149,6 +2147,14 @@ class MakeSurfaces(FSCommand):
             if prefix == 'aseg':
                 return # aseg is already the default
             return spec.argstr % prefix
+        if name in ['in_T2']:
+            # These inputs do take full paths as inputs but no extension
+            basename = os.path.basename(value)
+            suffix = basename.split('.')[0:-1]
+            suffix = '.'.join(suffix)
+            return os.path.join(self.inputs.subjects_dir,
+                                self.inputs.subject_id,
+                                'mri', spec.argstr % suffix)
         elif name in ['orig_white', 'orig_pial']:
             # these inputs do take full file paths or even basenames
             basename = os.path.basename(value)
