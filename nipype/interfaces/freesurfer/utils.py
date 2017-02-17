@@ -35,7 +35,7 @@ filetypes = ['cor', 'mgh', 'mgz', 'minc', 'analyze',
              'nifti1', 'nii', 'niigz']
 
 
-def copy2subjdir(cls, in_file, folder=None, basename=None, subject_id=None):
+def copy2subjdir(cls, in_file, folder=None, basename=None, subject_id=None, overwrite=False):
     """Method to copy an input to the subjects directory"""
     # check that the input is defined
     if not isdefined(in_file):
@@ -63,7 +63,7 @@ def copy2subjdir(cls, in_file, folder=None, basename=None, subject_id=None):
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
     out_file = os.path.join(out_dir, basename)
-    if not os.path.isfile(out_file):
+    if not os.path.isfile(out_file) or overwrite:
         shutil.copy(in_file, out_file)
     return out_file
 
@@ -109,7 +109,7 @@ class ModifySubsDir(IOBase):
             if isdefined(infile) and isdefined(indirectory):
                 if not isdefined(inbasename):
                     inbasename = None
-                copy2subjdir(self, infile, indirectory, inbasename)
+                copy2subjdir(self, infile, indirectory, inbasename, overwrite=True)
         outputs['subjects_dir'] = os.path.abspath(subjects_dir)
         return outputs
 
