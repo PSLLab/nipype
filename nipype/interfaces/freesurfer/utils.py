@@ -2065,7 +2065,7 @@ class MakeSurfacesInputSpec(FSTraitedSpec):
                               "directory.")
     first_wm_peak = traits.Bool(argstr='-first_wm_peak', desc='first_wm_peak')
     suffix = traits.String('', usedefault=True, desc='suffic to put on the end of file names output')
-    variable_sigma = traits.String(argstr='-variable_sigma %s', desc='variable_sigma')
+    variable_sigma = traits.String(argstr='-variablesigma %s', desc='variable_sigma')
     nsigma_above = traits.String(argstr='-nsigma_above %s', desc='nsigma_above')
     nsigma_below = traits.String(argstr='-nsigma_below %s', desc='nsigma_below')
     in_T2 = File(argstr="-T2 %s", exists=True, desc="Input T2 file")
