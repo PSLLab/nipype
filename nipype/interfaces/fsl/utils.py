@@ -545,7 +545,7 @@ class ImageStatsInputSpec(FSLCommandInputSpec):
                                  "applied in order, e.g. -M -l 10 -M will "
                                  "report the non-zero mean, apply a threshold "
                                  "and then report the new nonzero mean"))
-    mask_file = File(exists=True, argstr="",
+    mask_file = File(exists=True, argstr="-k %s",
                      desc='mask file used for option -k %s')
 
 
