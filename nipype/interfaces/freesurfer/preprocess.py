@@ -898,9 +898,9 @@ class BBRegister(FSCommand):
             if 'subjects_dir' in inputs:
                 inputs['subjects_dir'] = self.inputs.subjects_dir
             copy2subjdir(self, self.inputs.lh_surf,
-                         folder='surf')
+                         folder='surf', overwrite=True)
             copy2subjdir(self, self.inputs.rh_surf,
-                         folder='surf')
+                         folder='surf', overwrite=True)
         return super(BBRegister, self).run(**inputs)
 
     def _list_outputs(self):
