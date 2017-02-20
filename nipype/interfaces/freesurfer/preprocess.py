@@ -901,7 +901,7 @@ class BBRegister(FSCommand):
                          folder='surf')
             copy2subjdir(self, self.inputs.rh_surf,
                          folder='surf')
-            copy2subjdir(self, self.inputs.origi_file, folder='mri')
+            copy2subjdir(self, self.inputs.orig_file, folder='mri')
         return super(BBRegister, self).run(**inputs)
 
     def _list_outputs(self):
