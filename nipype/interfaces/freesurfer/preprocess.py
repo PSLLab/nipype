@@ -856,6 +856,7 @@ class BBRegisterInputSpec(FSTraitedSpec):
     surf_file = traits.String(desc='surface name', argstr='--surf %s')
     lh_surf = traits.File(desc='implicit copy')
     rh_surf = traits.File(desc='implicit copy')
+    orig_file = traits.File(desc='implicit copy')
     copy_inputs = traits.Bool(desc="Copies implicit inputs to node directory " +
                               "and creates a temp subjects_directory. " +
                               "Use this when running as a node")
@@ -900,6 +901,7 @@ class BBRegister(FSCommand):
                          folder='surf')
             copy2subjdir(self, self.inputs.rh_surf,
                          folder='surf')
+            copy2subjdir(self, self.inputs.origi_file, folder='mri')
         return super(BBRegister, self).run(**inputs)
 
     def _list_outputs(self):
