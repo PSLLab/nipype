@@ -618,7 +618,7 @@ class ReconAllInputSpec(CommandLineInputSpec):
                    desc='Convert T2 image to orig directory')
     use_T2 = traits.Bool(argstr="-T2pial", min_ver='5.3.0',
                          desc='Use converted T2 to refine the cortical surface')
-    openmp = traits.Int(argstr="-openmp %d",
+    openmp = traits.Int(argstr="-openmp %d", hash_files=False,
                         desc="Number of processors to use in parallel")
     subjects_dir = Directory(exists=True, argstr='-sd %s', hash_files=False,
                              desc='path to subjects directory', genfile=True)
@@ -629,6 +629,7 @@ class ReconAllInputSpec(CommandLineInputSpec):
 class ReconAllIOutputSpec(FreeSurferSource.output_spec):
     subjects_dir = Directory(exists=True, desc='Freesurfer subjects directory.')
     subject_id = traits.Str(desc='Subject name for whom to retrieve data')
+    subject_dir = Directory(exists=True, desc='only this subjects directory')
 
 
 class ReconAll(CommandLine):
@@ -764,6 +765,7 @@ class ReconAll(CommandLine):
                                         hemi=hemi)._list_outputs())
         outputs['subject_id'] = self.inputs.subject_id
         outputs['subjects_dir'] = os.getcwd()
+        outputs['subject_dir'] = os.path.join(os.getcwd(), self.inputs.subject_id)
         return outputs
 
     def _is_resuming(self):
