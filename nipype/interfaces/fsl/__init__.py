@@ -29,4 +29,4 @@ from .dti import (BEDPOSTX, XFibres, DTIFit,
                   TractSkeleton, MakeDyadicVectors, BEDPOSTX5, XFibres5)
 from .maths import (ChangeDataType, Threshold, MeanImage, ApplyMask,
                     IsotropicSmooth, TemporalFilter, DilateImage, ErodeImage,
-                    SpatialFilter, UnaryMaths, BinaryMaths, MultiImageMaths)
+                    SpatialFilter, UnaryMaths, BinaryMaths, MultiImageMaths, MathsCommand)
