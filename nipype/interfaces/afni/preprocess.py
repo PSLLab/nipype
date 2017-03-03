@@ -2432,7 +2432,7 @@ class AFNItoNIFTIInputSpec(AFNICommandInputSpec):
                    mandatory=True,
                    exists=True,
                    copyfile=False)
-    out_file = File(name_template="%s.nii", desc='output image file name',
+    out_file = File(name_template="%s.nii.gz", desc='output image file name',
                     argstr='-prefix %s', name_source="in_file")
     hash_files = False
 
@@ -2459,10 +2459,10 @@ class AFNItoNIFTI(AFNICommand):
     input_spec = AFNItoNIFTIInputSpec
     output_spec = AFNICommandOutputSpec
 
-    def _overload_extension(self, value):
+    def _overload_extension(self, value, name=None):
         path, base, ext = split_filename(value)
         if ext.lower() not in [".1d", ".nii.gz", ".1D"]:
-            ext = ext + ".nii"
+            ext = ext + ".nii.gz"
         return os.path.join(path, base + ext)
 
     def _gen_filename(self, name):
