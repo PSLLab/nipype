@@ -837,6 +837,8 @@ class FLAMEOInputSpec(FSLCommandInputSpec):
     outlier_iter = traits.Int(argstr='--ioni=%d',
                               desc='Number of max iterations to use when inferring outliers. Default is 12.')
     log_dir = Directory("stats", argstr='--ld=%s', usedefault=True)  # ohinds
+    zut = traits.Float(argstr='--zut=%s')
+    zlt = traits.Float(argstr='--zlt=%s')
     # no support for ven, vef
 
 
