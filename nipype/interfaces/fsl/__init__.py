@@ -27,6 +27,6 @@ from .dti import (BEDPOSTX, XFibres, DTIFit,
                   ProbTrackX, ProbTrackX2,
                   VecReg, ProjThresh, FindTheBiggest, DistanceMap,
                   TractSkeleton, MakeDyadicVectors, BEDPOSTX5, XFibres5)
-from .maths import (ChangeDataType, Threshold, MeanImage, ApplyMask,
+from .maths import (ChangeDataType, Threshold, MeanImage, ApplyMask, MinImage,
                     IsotropicSmooth, TemporalFilter, DilateImage, ErodeImage,
                     SpatialFilter, UnaryMaths, BinaryMaths, MultiImageMaths, MathsCommand)
