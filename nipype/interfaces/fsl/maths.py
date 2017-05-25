@@ -164,6 +164,17 @@ class MaxImage(MathsCommand):
     input_spec = MaxImageInput
     _suffix = "_max"
 
+class MinImageInput(MathsInput):
+
+    dimension = traits.Enum("T", "X", "Y", "Z", usedefault=True,
+                            argstr="-%smin", position=4,
+                            desc="dimension to min across")
+
+class MinImage(MathsCommand):
+    """Use fslmaths to generate a minimum image across a given dimension.
+    """
+    input_spec = MinImageInput
+    _suffix = "_min"
 
 class IsotropicSmoothInput(MathsInput):
 
