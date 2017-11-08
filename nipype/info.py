@@ -134,7 +134,7 @@ ISRELEASE = _version_extra == ''
 VERSION = __version__
 PROVIDES = ['nipype']
 REQUIRES = ["nibabel>=%s" % NIBABEL_MIN_VERSION,
-            "networkx>=%s" % NETWORKX_MIN_VERSION,
+            'networkx>=%s,<=%s' % (NETWORKX_MIN_VERSION, NETWORKX_MAX_VERSION),
             "numpy>=%s" % NUMPY_MIN_VERSION,
             "python-dateutil>=%s" % DATEUTIL_MIN_VERSION,
             "scipy>=%s" % SCIPY_MIN_VERSION,
