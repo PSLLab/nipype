@@ -63,7 +63,7 @@ def split_filename(fname):
 
     """
 
-    special_extensions = [".nii.gz", ".tar.gz", ".surf.gii", ".shape.gii", "label.gii"]
+    special_extensions = [".nii.gz", ".tar.gz", ".surf.gii", ".shape.gii", ".label.gii"]
 
     pth = os.path.dirname(fname)
     fname = os.path.basename(fname)
