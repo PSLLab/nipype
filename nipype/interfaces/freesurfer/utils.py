@@ -986,7 +986,7 @@ class MRIsConvertInputSpec(FSTraitedSpec):
 
     in_file = File(exists=True, mandatory=True, position=-2, argstr='%s', desc='File to read/convert')
     out_file = File(argstr='%s', position=-1, genfile=True,
-                    xor=['out_datatype'], mandatory=True,
+                    xor=['out_datatype'], mandatory=True, name_template='%s.surf.gii', name_source=['in_file']
                     desc='output filename or True to generate one')
 
     out_datatype = traits.Enum("ico", "tri", "stl", "vtk", "gii", "mgh", "mgz",
