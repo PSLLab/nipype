@@ -1023,7 +1023,7 @@ class MRIsConvert(FSCommand):
     input_spec = MRIsConvertInputSpec
     output_spec = MRIsConvertOutputSpec
 
-    def _overload_extension(self, value):
+    def _overload_extension(self, value, name=None):
         return value + self.out_datatype
 
     # def _format_arg(self, name, spec, value):
