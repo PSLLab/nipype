@@ -985,7 +985,7 @@ class MRIsConvertInputSpec(FSTraitedSpec):
     origname = traits.String(argstr="-o %s", desc="read orig positions")
 
     in_file = File(exists=True, mandatory=True, position=-2, argstr='%s', desc='File to read/convert')
-    out_file = File(argstr='%s', position=-1, genfile=True,
+    converted = File(argstr='%s', position=-1, genfile=True,
                     xor=['out_datatype'], mandatory=True,
                     desc='output filename or True to generate one')
 
