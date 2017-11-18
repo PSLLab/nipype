@@ -1024,7 +1024,7 @@ class MRIsConvert(FSCommand):
     output_spec = MRIsConvertOutputSpec
 
     def _overload_extension(self, value, name=None):
-        return value + self.out_datatype
+        return value + self.inputs.out_datatype
 
     # def _format_arg(self, name, spec, value):
     #     if name == "out_file" and not os.path.isabs(value):
