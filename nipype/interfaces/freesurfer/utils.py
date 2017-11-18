@@ -1003,7 +1003,7 @@ class MRIsConvertOutputSpec(TraitedSpec):
     """
     Uses Freesurfer's mris_convert to convert surface files to various formats
     """
-    converted = File(exists=True, desc='converted output surface')
+    out_file = File(exists=True, desc='converted output surface')
 
 
 class MRIsConvert(FSCommand):
