@@ -985,7 +985,7 @@ class MRIsConvertInputSpec(FSTraitedSpec):
     origname = traits.String(argstr="-o %s", desc="read orig positions")
 
     in_file = File(exists=True, mandatory=True, position=-2, argstr='%s', desc='File to read/convert')
-    out_file = File(argstr='%s', position=-1, genfile=True,
+    out_file = File(argstr='%s', position=-1,
                     xor=['out_datatype'], mandatory=True, name_template='%s.surf.gii', name_source=['in_file'],
                     desc='output filename or True to generate one')
 
