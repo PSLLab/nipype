@@ -23,7 +23,7 @@ class MathsInput(FSLCommandInputSpec):
 
     in_file = File(position=2, argstr="%s", exists=True, mandatory=True,
                    desc="image to operate on")
-    out_file = File(genfile=True, position=-2, argstr="%s", desc="image to write", hash_files=False)
+    out_file = File(genfile=True, position=-2, argstr="%s", desc="image to write", hash_files=False, name_template='%s_math', name_source=['in_file'])
     _dtypes = ["float", "char", "int", "short", "double", "input"]
     internal_datatype = traits.Enum(*_dtypes, position=1, argstr="-dt %s",
                                     desc="datatype to use for calculations (default is float)")
