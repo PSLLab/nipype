@@ -750,6 +750,183 @@ threshold=10, results_dir='stats')
                 outputs['zfstats'] = zfstats
         return outputs
 
+class FILMCiftiInputSpec(FSLCommandInputSpec):
+    in_file = File(exists=True, mandatory=True,
+                   argstr='-i %s', desc='input data file')
+    out_file = traits.String(desc='basename for output file', mandatory=True, argstr='-o %s', default='outStats')
+    left_surface = File(desc='left surface', exists=True, argstr='-l %s')
+    right_surface = File(desc='left surface', exists=True, argstr='-r %s')
+    smooth_autocorr = traits.Bool(argstr='--sa',
+                                  desc='Smooth auto corr estimates')
+    mask_size = traits.Int(argstr='--sm %d', desc="susan mask size")
+    surface_sigma = traits.Int(argstr='--ss %d', desc="surface sigma")
+    surface_extent = traits.Int(argstr='--se %d', desc="surface extent")
+    brightness_threshold = traits.Range(low=0, argstr='--st %d',
+                                        desc=('susan brightness threshold, '
+                                              'otherwise it is estimated'))
+    tcon_file = File(exists=True, argstr='--con=%s"', position=-1
+                     desc='contrast file containing T-contrasts')
+    fcon_file = File(exists=True, argstr='--fcon=%s', position=-3
+                     desc='contrast file containing F-contrasts')
+    threshold = traits.Range(default=0.0, low=0.0, argstr='--thr=%f',
+                             position=-2, usedefault=True, desc='threshold')
+    design_file = File(exists=True, position=-4,
+                       argstr='--film-options "--pd=%s', desc='design matrix file')
+
+
+class FILMCiftiOutputSpec(TraitedSpec):
+    param_estimates = OutputMultiPath(File(exists=True),
+                                      desc='Parameter estimates for each column of the design matrix')
+    residual4d = File(exists=True,
+                      desc='Model fit residual mean-squared error for each time point')
+    dof_file = File(exists=True, desc='degrees of freedom')
+    sigmasquareds = File(
+        exists=True, desc='summary of residuals, See Woolrich, et. al., 2001')
+    results_dir = Directory(exists=True,
+                            desc='directory storing model estimation output')
+    thresholdac = File(exists=True,
+                       desc='The FILM autocorrelation parameters')
+    logfile = File(exists=True,
+                   desc='FILM run logfile')
+    copes = OutputMultiPath(File(exists=True),
+                            desc='Contrast estimates for each contrast')
+    varcopes = OutputMultiPath(File(exists=True),
+                               desc='Variance estimates for each contrast')
+    zstats = OutputMultiPath(File(exists=True),
+                             desc='z-stat file for each contrast')
+    tstats = OutputMultiPath(File(exists=True),
+                             desc='t-stat file for each contrast')
+    fstats = OutputMultiPath(File(exists=True),
+                             desc='f-stat file for each contrast')
+    zfstats = OutputMultiPath(File(exists=True),
+                              desc='z-stat file for each F contrast')
+
+
+class FILMCifti(FSLCommand):
+    """Use FSL film_gls command to fit a design matrix to voxel timeseries
+
+    Examples
+    --------
+
+    Initialize with no options, assigning them when calling run:
+
+    >>> from nipype.interfaces import fsl
+    >>> fgls = fsl.FILMGLS()
+    >>> res = fgls.run('in_file', 'design_file', 'thresh', rn='stats') #doctest: +SKIP
+
+    Assign options through the ``inputs`` attribute:
+
+    >>> fgls = fsl.FILMGLS()
+    >>> fgls.inputs.in_file = 'functional.nii'
+    >>> fgls.inputs.design_file = 'design.mat'
+    >>> fgls.inputs.threshold = 10
+    >>> fgls.inputs.results_dir = 'stats'
+    >>> res = fgls.run() #doctest: +SKIP
+
+    Specify options when creating an instance:
+
+    >>> fgls = fsl.FILMGLS(in_file='functional.nii', \
+design_file='design.mat', \
+threshold=10, results_dir='stats')
+    >>> res = fgls.run() #doctest: +SKIP
+
+    """
+
+    _cmd = 'film_cifti'
+    input_spec = FILMGLSInputSpec
+    output_spec = FILMGLSOutputSpec
+
+    def _get_pe_files(self, cwd):
+        files = None
+        if isdefined(self.inputs.design_file):
+            fp = open(self.inputs.design_file, 'rt')
+            for line in fp.readlines():
+                if line.startswith('/NumWaves'):
+                    numpes = int(line.split()[-1])
+                    files = []
+                    for i in range(numpes):
+                        files.append(self._gen_fname('pe%d.nii' % (i + 1),
+                                                     cwd=cwd))
+                    break
+            fp.close()
+        return files
+
+    def _get_numcons(self):
+        numtcons = 0
+        numfcons = 0
+        if isdefined(self.inputs.tcon_file):
+            fp = open(self.inputs.tcon_file, 'rt')
+            for line in fp.readlines():
+                if line.startswith('/NumContrasts'):
+                    numtcons = int(line.split()[-1])
+                    break
+            fp.close()
+        if isdefined(self.inputs.fcon_file):
+            fp = open(self.inputs.fcon_file, 'rt')
+            for line in fp.readlines():
+                if line.startswith('/NumContrasts'):
+                    numfcons = int(line.split()[-1])
+                    break
+            fp.close()
+        return numtcons, numfcons
+
+    def _list_outputs(self):
+        outputs = self._outputs().get()
+        cwd = os.getcwd()
+        results_dir = os.path.join(cwd, self.inputs.results_dir)
+        outputs['results_dir'] = results_dir
+        pe_files = self._get_pe_files(results_dir)
+        if pe_files:
+            outputs['param_estimates'] = pe_files
+        outputs['residual4d'] = self._gen_fname('res4d.nii', cwd=results_dir)
+        outputs['dof_file'] = os.path.join(results_dir, 'dof')
+        outputs['sigmasquareds'] = self._gen_fname('sigmasquareds.nii',
+                                                   cwd=results_dir)
+        outputs['thresholdac'] = self._gen_fname('threshac1.nii',
+                                                 cwd=results_dir)
+        if Info.version() and LooseVersion(Info.version()) < LooseVersion('5.0.7'):
+            outputs['corrections'] = self._gen_fname('corrections.nii',
+                                                     cwd=results_dir)
+        outputs['logfile'] = self._gen_fname('logfile',
+                                             change_ext=False,
+                                             cwd=results_dir)
+
+        if Info.version() and LooseVersion(Info.version()) > LooseVersion('5.0.6'):
+            pth = results_dir
+            numtcons, numfcons = self._get_numcons()
+            base_contrast = 1
+            copes = []
+            varcopes = []
+            zstats = []
+            tstats = []
+            neffs = []
+            for i in range(numtcons):
+                copes.append(self._gen_fname('cope%d.nii' % (base_contrast + i),
+                                             cwd=pth))
+                varcopes.append(
+                    self._gen_fname('varcope%d.nii' % (base_contrast + i),
+                                    cwd=pth))
+                zstats.append(self._gen_fname('zstat%d.nii' % (base_contrast + i),
+                                              cwd=pth))
+                tstats.append(self._gen_fname('tstat%d.nii' % (base_contrast + i),
+                                              cwd=pth))
+            if copes:
+                outputs['copes'] = copes
+                outputs['varcopes'] = varcopes
+                outputs['zstats'] = zstats
+                outputs['tstats'] = tstats
+            fstats = []
+            zfstats = []
+            for i in range(numfcons):
+                fstats.append(self._gen_fname('fstat%d.nii' % (base_contrast + i),
+                                              cwd=pth))
+                zfstats.append(
+                    self._gen_fname('zfstat%d.nii' % (base_contrast + i),
+                                    cwd=pth))
+            if fstats:
+                outputs['fstats'] = fstats
+                outputs['zfstats'] = zfstats
+        return outputs
 
 class FEATRegisterInputSpec(BaseInterfaceInputSpec):
     feat_dirs = InputMultiPath(
