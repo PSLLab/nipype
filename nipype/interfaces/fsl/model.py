@@ -770,8 +770,8 @@ class FILMCiftiInputSpec(FSLCommandInputSpec):
                              position=-2, usedefault=True, desc='threshold')
     design_file = File(exists=True, position=-4,
                        argstr='--pd=%s', desc='design matrix file')
-   smooth_autocorr = traits.Bool(argstr='--filmOptions "--sa', position=-5,
-                                 desc='Smooth auto corr estimates')
+    smooth_autocorr = traits.Bool(argstr='--filmOptions "--sa', position=-5,
+                                  desc='Smooth auto corr estimates')
 
 
 class FILMCiftiOutputSpec(TraitedSpec):
