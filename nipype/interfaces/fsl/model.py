@@ -764,9 +764,9 @@ class FILMCiftiInputSpec(FSLCommandInputSpec):
     brightness_threshold = traits.Range(low=0, argstr='--st %d',
                                         desc=('susan brightness threshold, '
                                               'otherwise it is estimated'))
-    tcon_file = File(exists=True, argstr='--con=%s"', position=-1
+    tcon_file = File(exists=True, argstr='--con=%s"', position=-1,
                      desc='contrast file containing T-contrasts')
-    fcon_file = File(exists=True, argstr='--fcon=%s', position=-3
+    fcon_file = File(exists=True, argstr='--fcon=%s', position=-3,
                      desc='contrast file containing F-contrasts')
     threshold = traits.Range(default=0.0, low=0.0, argstr='--thr=%f',
                              position=-2, usedefault=True, desc='threshold')
