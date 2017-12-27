@@ -756,8 +756,6 @@ class FILMCiftiInputSpec(FSLCommandInputSpec):
     out_file = traits.String(desc='basename for output file', mandatory=True, argstr='-o %s', default='outStats')
     left_surface = File(desc='left surface', exists=True, argstr='-l %s')
     right_surface = File(desc='left surface', exists=True, argstr='-r %s')
-    smooth_autocorr = traits.Bool(argstr='--sa',
-                                  desc='Smooth auto corr estimates')
     mask_size = traits.Int(argstr='--sm %d', desc="susan mask size")
     surface_sigma = traits.Int(argstr='--ss %d', desc="surface sigma")
     surface_extent = traits.Int(argstr='--se %d', desc="surface extent")
@@ -771,7 +769,9 @@ class FILMCiftiInputSpec(FSLCommandInputSpec):
     threshold = traits.Range(default=0.0, low=0.0, argstr='--thr=%f',
                              position=-2, usedefault=True, desc='threshold')
     design_file = File(exists=True, position=-4,
-                       argstr='--film-options "--pd=%s', desc='design matrix file')
+                       argstr='--pd=%s', desc='design matrix file')
+   smooth_autocorr = traits.Bool(argstr='--filmOptions "--sa', position=-5,
+                                 desc='Smooth auto corr estimates')
 
 
 class FILMCiftiOutputSpec(TraitedSpec):
