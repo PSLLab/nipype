@@ -833,8 +833,8 @@ threshold=10, results_dir='stats')
     """
 
     _cmd = 'film_cifti'
-    input_spec = FILMGLSInputSpec
-    output_spec = FILMGLSOutputSpec
+    input_spec = FILMCiftiInputSpec
+    output_spec = FILMCiftiOutputSpec
 
     def _get_pe_files(self, cwd):
         files = None
