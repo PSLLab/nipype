@@ -873,7 +873,7 @@ threshold=10, results_dir='stats')
     def _list_outputs(self):
         outputs = self._outputs().get()
         cwd = os.getcwd()
-        results_dir = os.path.join(cwd, self.inputs.results_dir)
+        results_dir = os.path.join(cwd, 'stats')
         outputs['results_dir'] = results_dir
         pe_files = self._get_pe_files(results_dir)
         if pe_files:
@@ -891,41 +891,40 @@ threshold=10, results_dir='stats')
                                              change_ext=False,
                                              cwd=results_dir)
 
-        if Info.version() and LooseVersion(Info.version()) > LooseVersion('5.0.6'):
-            pth = results_dir
-            numtcons, numfcons = self._get_numcons()
-            base_contrast = 1
-            copes = []
-            varcopes = []
-            zstats = []
-            tstats = []
-            neffs = []
-            for i in range(numtcons):
-                copes.append(self._gen_fname('cope%d.nii' % (base_contrast + i),
-                                             cwd=pth))
-                varcopes.append(
-                    self._gen_fname('varcope%d.nii' % (base_contrast + i),
-                                    cwd=pth))
-                zstats.append(self._gen_fname('zstat%d.nii' % (base_contrast + i),
-                                              cwd=pth))
-                tstats.append(self._gen_fname('tstat%d.nii' % (base_contrast + i),
-                                              cwd=pth))
-            if copes:
-                outputs['copes'] = copes
-                outputs['varcopes'] = varcopes
-                outputs['zstats'] = zstats
-                outputs['tstats'] = tstats
-            fstats = []
-            zfstats = []
-            for i in range(numfcons):
-                fstats.append(self._gen_fname('fstat%d.nii' % (base_contrast + i),
-                                              cwd=pth))
-                zfstats.append(
-                    self._gen_fname('zfstat%d.nii' % (base_contrast + i),
-                                    cwd=pth))
-            if fstats:
-                outputs['fstats'] = fstats
-                outputs['zfstats'] = zfstats
+        pth = results_dir
+        numtcons, numfcons = self._get_numcons()
+        base_contrast = 1
+        copes = []
+        varcopes = []
+        zstats = []
+        tstats = []
+        neffs = []
+        for i in range(numtcons):
+            copes.append(self._gen_fname('cope%d.nii' % (base_contrast + i),
+                                         cwd=pth))
+            varcopes.append(
+                self._gen_fname('varcope%d.nii' % (base_contrast + i),
+                                cwd=pth))
+            zstats.append(self._gen_fname('zstat%d.nii' % (base_contrast + i),
+                                          cwd=pth))
+            tstats.append(self._gen_fname('tstat%d.nii' % (base_contrast + i),
+                                          cwd=pth))
+        if copes:
+            outputs['copes'] = copes
+            outputs['varcopes'] = varcopes
+            outputs['zstats'] = zstats
+            outputs['tstats'] = tstats
+        fstats = []
+        zfstats = []
+        for i in range(numfcons):
+            fstats.append(self._gen_fname('fstat%d.nii' % (base_contrast + i),
+                                          cwd=pth))
+            zfstats.append(
+                self._gen_fname('zfstat%d.nii' % (base_contrast + i),
+                                cwd=pth))
+        if fstats:
+            outputs['fstats'] = fstats
+            outputs['zfstats'] = zfstats
         return outputs
 
 class FEATRegisterInputSpec(BaseInterfaceInputSpec):
