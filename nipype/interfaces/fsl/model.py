@@ -836,6 +836,52 @@ threshold=10, results_dir='stats')
     input_spec = FILMCiftiInputSpec
     output_spec = FILMCiftiOutputSpec
 
+    def _gen_fname(self, basename, cwd=None, suffix=None, change_ext=False,
+                   ext=None):
+        """Generate a filename based on the given parameters.
+
+        The filename will take the form: cwd/basename<suffix><ext>.
+        If change_ext is True, it will use the extentions specified in
+        <instance>intputs.output_type.
+
+        Parameters
+        ----------
+        basename : str
+            Filename to base the new filename on.
+        cwd : str
+            Path to prefix to the new filename. (default is os.getcwd())
+        suffix : str
+            Suffix to add to the `basename`.  (defaults is '' )
+        change_ext : bool
+            Flag to change the filename extension to the FSL output type.
+            (default True)
+
+        Returns
+        -------
+        fname : str
+            New filename based on given parameters.
+
+        """
+
+        if basename == '':
+            msg = 'Unable to generate filename for command %s. ' % self.cmd
+            msg += 'basename is not set!'
+            raise ValueError(msg)
+        if cwd is None:
+            cwd = os.getcwd()
+        if ext is None:
+            ext = Info.output_type_to_ext(self.inputs.output_type)
+        if change_ext:
+            if suffix:
+                suffix = ''.join((suffix, ext))
+            else:
+                suffix = ext
+        if suffix is None:
+            suffix = ''
+        fname = fname_presuffix(basename, suffix=suffix,
+                                use_ext=True, newpath=cwd)
+        return fname
+
     def _get_pe_files(self, cwd):
         files = None
         if isdefined(self.inputs.design_file):
@@ -845,7 +891,7 @@ threshold=10, results_dir='stats')
                     numpes = int(line.split()[-1])
                     files = []
                     for i in range(numpes):
-                        files.append(self._gen_fname('pe%d.nii' % (i + 1),
+                        files.append(self._gen_fname('pe%d.dscalar.nii' % (i + 1),
                                                      cwd=cwd))
                     break
             fp.close()
@@ -878,15 +924,12 @@ threshold=10, results_dir='stats')
         pe_files = self._get_pe_files(results_dir)
         if pe_files:
             outputs['param_estimates'] = pe_files
-        outputs['residual4d'] = self._gen_fname('res4d.nii', cwd=results_dir)
+        outputs['residual4d'] = self._gen_fname('res4d.dscalar.nii', cwd=results_dir)
         outputs['dof_file'] = os.path.join(results_dir, 'dof')
-        outputs['sigmasquareds'] = self._gen_fname('sigmasquareds.nii',
+        outputs['sigmasquareds'] = self._gen_fname('sigmasquareds.dscalar.nii',
                                                    cwd=results_dir)
-        outputs['thresholdac'] = self._gen_fname('threshac1.nii',
+        outputs['thresholdac'] = self._gen_fname('threshac1.dscalar.nii',
                                                  cwd=results_dir)
-        if Info.version() and LooseVersion(Info.version()) < LooseVersion('5.0.7'):
-            outputs['corrections'] = self._gen_fname('corrections.nii',
-                                                     cwd=results_dir)
         outputs['logfile'] = self._gen_fname('logfile',
                                              change_ext=False,
                                              cwd=results_dir)
@@ -900,14 +943,14 @@ threshold=10, results_dir='stats')
         tstats = []
         neffs = []
         for i in range(numtcons):
-            copes.append(self._gen_fname('cope%d.nii' % (base_contrast + i),
+            copes.append(self._gen_fname('cope%d.dscalar.nii' % (base_contrast + i),
                                          cwd=pth))
             varcopes.append(
-                self._gen_fname('varcope%d.nii' % (base_contrast + i),
+                self._gen_fname('varcope%d.dscalar.nii' % (base_contrast + i),
                                 cwd=pth))
-            zstats.append(self._gen_fname('zstat%d.nii' % (base_contrast + i),
+            zstats.append(self._gen_fname('zstat%d.dscalar.nii' % (base_contrast + i),
                                           cwd=pth))
-            tstats.append(self._gen_fname('tstat%d.nii' % (base_contrast + i),
+            tstats.append(self._gen_fname('tstat%d.dscalar.nii' % (base_contrast + i),
                                           cwd=pth))
         if copes:
             outputs['copes'] = copes
@@ -917,10 +960,10 @@ threshold=10, results_dir='stats')
         fstats = []
         zfstats = []
         for i in range(numfcons):
-            fstats.append(self._gen_fname('fstat%d.nii' % (base_contrast + i),
+            fstats.append(self._gen_fname('fstat%d.dscalar.nii' % (base_contrast + i),
                                           cwd=pth))
             zfstats.append(
-                self._gen_fname('zfstat%d.nii' % (base_contrast + i),
+                self._gen_fname('zfstat%d.dscalar.nii' % (base_contrast + i),
                                 cwd=pth))
         if fstats:
             outputs['fstats'] = fstats
