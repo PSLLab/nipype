@@ -31,6 +31,7 @@ from ..base import (load_template, File, traits, isdefined,
                     BaseInterfaceInputSpec)
 from ...utils.filemanip import (list_to_filename, filename_to_list)
 from ...utils.misc import human_order_sorted
+from ...utils.filemanip import fname_presuffix
 
 warn = warnings.warn
 
