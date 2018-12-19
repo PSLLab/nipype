@@ -1681,6 +1681,8 @@ class ConvertWarpInputSpec(FSLCommandInputSpec):
                           'those given as arguments. The format of this will be a field-file (rather '
                           'than spline coefficients) with any affine components included.'))
 
+    jacobian_out = File(argstr='--jacobian=%s', desc='jacobian output', output_name='jacobian_out')
+
     premat = File(exists=True, argstr='--premat=%s',
                   desc='filename for pre-transform (affine matrix)')
 
@@ -1750,6 +1752,7 @@ class ConvertWarpInputSpec(FSLCommandInputSpec):
 class ConvertWarpOutputSpec(TraitedSpec):
     out_file = File(exists=True,
                     desc='Name of output file, containing the warp as field or coefficients.')
+    jacobian_out = File(desc='jacobian output file')
 
 
 class ConvertWarp(FSLCommand):
