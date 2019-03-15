@@ -108,11 +108,23 @@ class MergeInputSpec(DynamicTraitedSpec, BaseInterfaceInputSpec):
     axis = traits.Enum('vstack', 'hstack', usedefault=True,
                        desc='direction in which to merge, hstack requires same number of elements in each input')
     no_flatten = traits.Bool(False, usedefault=True, desc='append to outlist instead of extending in vstack mode')
+    ravel_inputs = traits.Bool(False, usedefault=True, desc='ravel inputs when no_flatten is False')
 
 
 class MergeOutputSpec(TraitedSpec):
     out = traits.List(desc='Merged output')
 
+def _ravel(in_val):
+    if not isinstance(in_val, list):
+        return in_val
+    flat_list = []
+    for val in in_val:
+        raveled_val = _ravel(val)
+        if isinstance(raveled_val, list):
+            flat_list.extend(raveled_val)
+        else:
+            flat_list.append(raveled_val)
+    return flat_list
 
 class Merge(IOBase):
     """Basic interface class to merge inputs into a single list
@@ -146,7 +158,7 @@ class Merge(IOBase):
                 value = getattr(self.inputs, 'in%d' % (idx + 1))
                 if isdefined(value):
                     if isinstance(value, list) and not self.inputs.no_flatten:
-                        out.extend(value)
+                        out.extend(_ravel(value) if self.inputs.ravel_inputs else value)
                     else:
                         out.append(value)
         else:
